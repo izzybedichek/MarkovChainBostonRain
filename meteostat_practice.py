@@ -15,13 +15,13 @@ boston_weather = Daily(boston, start_date, end_date)
 boston_weather = boston_weather.fetch()
 
 # copying the data frame for best practice data handling
-rain_data = boston_weather.copy()
+weather_data = boston_weather.copy()
 
 # checking the output
-print(rain_data)
+print(weather_data)
 
 # taking only precipitation and datetime, resetting index so that datetime is considered a column rather than an index
-rain_data = rain_data[["prcp"]].reset_index()
+rain_data = weather_data[["prcp"]].reset_index()
 
 # checking the output
 print(rain_data)

@@ -2,14 +2,22 @@ import pandas as pd
 import math
 import numpy as np
 
-weather = pd.read_excel("../../Desktop/imp/classes/linear algebra/NowData.xlsx")
-# using NOWData dataset from .gov weather website from boston
-#print(weather)
+from meteostat_practice import rain_data
 
-# cleaning weather data
+weather = rain_data.copy()
+
+weather.rename(columns = {"prcp": "precipitation"}, inplace = True)
+
+print(weather)
+
+### cleaning weather data ###
+
+# if it rained at all, set the column value to 1, else 0
 weather["precipitation"] = weather["precipitation"].apply(lambda x: 1 if x > 0 else 0)
-weather["day_week"] = ["Q", "Q", "Q", "Q", "W", "W", "Q"]*4 + ["Q", "Q"]
-weather["together"] = weather["precipitation"].astype("string") + "," + weather["day_week"]
+
+# June 24 2024 was a Monday, 52 * 7 is 364
+weather["day_of_week"] = ["Q", "Q", "Q", "Q", "W", "W", "W"]*(365/7).__floor__() + ["Q", "Q"]
+weather["together"] = weather["precipitation"].astype("string") + "," + weather["day_of_week"]
 weather_list = weather["together"].tolist()
 
 #https://medium.com/data-science/time-series-data-markov-transition-matrices-7060771e362b
@@ -22,17 +30,17 @@ def get_transition_state(tuple_list):
     """converts list of tuples into transition states"""
     transition_event = "no_change"
     if tuple_list[0] == "1,Q" and tuple_list[1] == "1,Q":
-        transition_event = "rained"
+        transition_event = "rained_Q"
     if tuple_list[0] == "0,Q" and tuple_list[1] == "1,Q":
-        transition_event = "rained"
+        transition_event = "rained_Q"
     if tuple_list[0] == "1,Q" and tuple_list[1] == "0,Q":
-        transition_event = "cleared"
+        transition_event = "cleared_Q"
     if tuple_list[0] == "0,Q" and tuple_list[1] == "0,Q":
-        transition_event = "cleared"
+        transition_event = "cleared_Q"
     if tuple_list[0] == "1,Q" and tuple_list[1] == "0,W": # because this does not tell us about the whole weekend
-        transition_event = "cleared"
+        transition_event = "cleared_Q"
     if tuple_list[0] == "0,Q" and tuple_list[1] == "0,W": # because this does not tell us about the whole weekend
-        transition_event = "cleared"
+        transition_event = "cleared_Q"
     if tuple_list[0] == "1,Q" and tuple_list[1] == "1,W":
         transition_event = "rained_W"
     if tuple_list[0] == "0,Q" and tuple_list[1] == "1,W":
@@ -46,13 +54,13 @@ def get_transition_state(tuple_list):
     if tuple_list[0] == "1,W" and tuple_list[1] == "0,W": # bc weekend included a rain event
         transition_event = "rained_W"
     if tuple_list[0] == "0,W" and tuple_list[1] == "1,Q":
-        transition_event = "rained"
+        transition_event = "rained_Q"
     if tuple_list[0] == "1,W" and tuple_list[1] == "1,Q":
-        transition_event = "rained"
+        transition_event = "rained_Q"
     if tuple_list[0] == "0,W" and tuple_list[1] == "0,Q":
-        transition_event = "cleared"
+        transition_event = "cleared_Q"
     if tuple_list[0] == "1,W" and tuple_list[1] == "0,Q":
-        transition_event = "cleared"
+        transition_event = "cleared_Q"
     return(transition_event)
 
 # formally getting tuple list from data
@@ -67,7 +75,7 @@ weather_transitions_per_day = get_transition_tuples(weather_transitions)
 #print(weather_transitions_per_day)
 
 # indexes
-weather_indexes = ["rained", "cleared", "rained_W", "clear_W"]
+weather_indexes = ["rained_Q", "cleared_Q", "rained_W", "clear_W"]
 
 # dataframe
 weather_df = pd.DataFrame(0, index=weather_indexes, columns=weather_indexes)
