@@ -14,8 +14,9 @@ print(weather)
 
 # if it rained at all, set the column value to 1, else 0
 weather["precipitation"] = weather["precipitation"].apply(lambda x: 1 if x > 0 else 0)
+#print(weather)
 
-# June 24 2024 was a Monday, 52 * 7 is 364
+# June 24 2024 was a Monday, 52 * 7 is 364, Q = day of week, W = weekend or Friday
 weather["day_of_week"] = ["Q", "Q", "Q", "Q", "W", "W", "W"]*(365/7).__floor__() + ["Q", "Q"]
 weather["together"] = weather["precipitation"].astype("string") + "," + weather["day_of_week"]
 weather_list = weather["together"].tolist()
@@ -92,3 +93,7 @@ weather_row_norm = weather_df.div(weather_df.sum(axis = 1), axis = 0).fillna(0.0
 # turning into array
 weather_array = np.array(weather_row_norm)
 print(weather_row_norm)
+
+# shrinking the array so that only weekend data is included
+weekend_only = weather_array[2:4, 2:4]
+print(weekend_only)
