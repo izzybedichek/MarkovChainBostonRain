@@ -2,7 +2,7 @@ import pandas as pd
 import math
 import numpy as np
 
-from meteostat_practice import rain_data
+from data_loading import rain_data
 
 weather = rain_data.copy()
 
