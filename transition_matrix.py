@@ -97,3 +97,6 @@ print(weather_row_norm)
 # shrinking the array so that only weekend data is included
 weekend_only = weather_array[2:4, 2:4]
 print(weekend_only)
+
+weather_df.to_csv('weather_data.csv', index=False)
+weekend_only.to_csv('transition_matrix.csv', index=False)
