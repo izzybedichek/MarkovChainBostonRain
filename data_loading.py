@@ -18,10 +18,10 @@ boston_weather = boston_weather.fetch()
 weather_data = boston_weather.copy()
 
 # checking the output
-#print(weather_data)
+print(weather_data)
 
 # taking only precipitation and datetime, resetting index so that datetime is considered a column rather than an index
 rain_data = weather_data[["prcp"]].reset_index()
 
 # checking the output
-#print(rain_data)
+print(rain_data)
