@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from transition_matrix import weather
+from transition_matrix_weekend import weather
 
 print(weather)
 
