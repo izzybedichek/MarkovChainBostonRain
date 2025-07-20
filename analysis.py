@@ -2,6 +2,8 @@ import pandas as pd
 import math
 import numpy as np
 
+
+# weekend only matrix
 matrix = np.loadtxt('transition_matrix.csv', delimiter=',')
 print(matrix)
 
@@ -16,7 +18,7 @@ initial_state_clear = np.array([0,1]).reshape(2,1)
 # 10/90 chance = .9, .1.
 initial_state_nine_to_one = np.array([.9,.1]).reshape(2,1)
 
-# 50/950 chance = .5, .5.
+# 50/50 chance = .5, .5.
 initial_state_half = np.array([.5,.5]).reshape(2,1)
 
 one_week_after = df*initial_state_nine_to_one
