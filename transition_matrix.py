@@ -100,4 +100,4 @@ print(weather_row_norm)
 weekend_only = weather_array[2:4, 2:4]
 print(weekend_only)
 
-weather_df.to_csv('weather_transition.csv', index=True)
+# weather_df.to_csv('weather_transition.csv', index=True)
