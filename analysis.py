@@ -7,10 +7,10 @@ print(matrix)
 
 df = pd.DataFrame(matrix, columns=['rain', 'clear'], index=['rain', 'clear'])
 
-# must rain on first day = 1,0. 50/50 chance = .5, .5
+# must rain on first day = 1,0.
 initial_state_rain = np.array([1,0]).reshape(2,1)
 
-# must NOT rain on first day = 0,1. 50/50 chance = .5, .5.
+# must NOT rain on first day = 0,1.
 initial_state_clear = np.array([0,1]).reshape(2,1)
 
 # 10/90 chance = .9, .1.
