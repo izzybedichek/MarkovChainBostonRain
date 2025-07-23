@@ -30,7 +30,8 @@ def get_transition_tuples(list):
     return [(list[i - 1], list[i]) for i in range(1, len(list))]
 
 def get_transition_state(tuple_list):
-    """converts list of tuples into transition states"""
+    """converts list of tuples into transition states. The transition state
+    is indicative of whether it rained AT ALL on a given weekend."""
     transition_event = "no_change"
     if tuple_list[0] == "1,Q" and tuple_list[1] == "1,Q":
         transition_event = "rained_Q"
@@ -86,7 +87,7 @@ weather_df = pd.DataFrame(0, index=weather_indexes, columns=weather_indexes)
 # filling df
 for a,b in weather_transitions_per_day:
     weather_df.loc[a,b] += 1
-#print(weather_df)
+print(weather_df)
 
 # normalizing matrix, question: row or column normalization
 weather_row_norm = weather_df.div(weather_df.sum(axis = 1), axis = 0).fillna(0.00)
