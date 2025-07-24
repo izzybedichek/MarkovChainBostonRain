@@ -2,9 +2,12 @@ import pandas as pd
 import math
 import numpy as np
 
-from data_loading import rain_data
+### If using data from data_loading:
+# from data_loading import rain_data
+# weather = rain_data.copy()
 
-weather = rain_data.copy()
+### If using weather from Iterartion_5
+from Iteration_5 import
 
 weather.rename(columns = {"prcp": "precipitation"}, inplace = True)
 
