@@ -2,12 +2,9 @@ import pandas as pd
 import math
 import numpy as np
 
-### If using data from data_loading:
-# from data_loading import rain_data
-# weather = rain_data.copy()
 
-### If using weather from Iterartion_5
-from Iteration_5 import
+from data_loading import rain_data
+weather = rain_data.copy()
 
 weather.rename(columns = {"prcp": "precipitation"}, inplace = True)
 
@@ -104,5 +101,6 @@ print(weather_row_norm)
 weekend_only = weather_array[2:4, 2:4]
 print(weekend_only)
 
-weather_df.to_csv('weather_transition.csv', index=True)
-np.savetxt('transition_matrix.csv', weekend_only, delimiter=',')
+### uncomment to get csv versions of these dataframes
+# weather_df.to_csv('weather_transition.csv', index=True)
+# np.savetxt('transition_matrix.csv', weekend_only, delimiter=',')

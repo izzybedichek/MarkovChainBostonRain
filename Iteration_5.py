@@ -1,4 +1,8 @@
 ### Initial findings or test runs ###
+
+# the initial findings were in an attached csv file called transition_matrix.csv
+# It is the transition matrix created from data
+
 from datetime import datetime
 from meteostat import Point, Daily
 
@@ -24,17 +28,32 @@ weather_25_copy = weather_25.copy()
 weather_24_copy = weather_24.copy()
 
 # isolating rain data
-rain_24 = weather_24[["prcp"]].reset_index()
-rain_25 = weather_25[["prcp"]].reset_index()
+rain_24 = weather_24_copy[["prcp"]].reset_index()
+rain_25 = weather_25_copy[["prcp"]].reset_index()
 
 # If need .csv files, uncomment:
 # rain_24.to_csv("rain_24.csv", index = True)
 # rain_25.to_csv("rain_25.csv", index = True)
 
+rain_24.rename(columns = {"prcp": "precipitation"}, inplace = True)
+rain_25.rename(columns = {"prcp": "precipitation"}, inplace = True)
 
-""" Compare transition matrices of this year only data vs whole previous year data"""
+# if it rained at all, set the column value to 1, else 0
+rain_24["precipitation"] = rain_24["precipitation"].apply(lambda x: 1 if x > 0 else 0)
+rain_25["precipitation"] = rain_25["precipitation"].apply(lambda x: 1 if x > 0 else 0)
 
-# grab first 6 month og 2024, 2025 #
+# First day of 2024 was a Monday, first day of 2025 was a Wednesday
+rain_24["day_of_week"] = (["Q", "Q", "Q", "Q", "W", "W", "W"]*(len(rain_24)/7).__floor__())
+rain_24["together"] = rain_24["precipitation"].astype("string") + "," + rain_24["day_of_week"]
+twenty_four_list = rain_24["together"].tolist()
+
+rain_25["day_of_week"] = (["Q", "Q", "Q", "Q", "W", "W", "W"]*(len(rain_25)/7).__floor__() + ["Q", "Q", "Q", "Q", "W", "W"])
+rain_25["together"] = rain_25["precipitation"].astype("string") + "," + rain_25["day_of_week"]
+twenty_five_list = rain_25["together"].tolist()
+
+
+""" Compare transition matrices of the first 6 months of 2024, 2025"""
+
 
 # Discuss how these early results might shape your further analysis: comparing more years
 
