@@ -1,8 +1,10 @@
-### Initial findings or test runs ###
 
-# the initial findings were in an attached csv file called transition_matrix.csv
-# It is the transition matrix created from data
+### All of iteration 5 is in this document
 
+### Initial Findings: ###
+
+import networkx as nx
+import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from datetime import datetime
@@ -109,12 +111,14 @@ print("Probability of rain after rain \n", "2024:", weekend_only_24[0,0], "vs",
       "\n Probability of clear after clear \n", "2024:", weekend_only_24[1,1], "vs",
       "2025:", weekend_only_25[1,1])
 
-# Discuss how these early results might shape your further analysis:
-# These results show a distinct difference in likelihood to rain from weekend to weekend based on year.
-# This result makes us want to look at more years and see if there's a pattern as well as if the
-# Stationary distributions are different
+### Discuss how these early results might shape your further analysis: ###
 
- """ 
+"""
+These results show a distinct difference in likelihood to rain from weekend to weekend based on year.
+This result makes us want to look at more years and see if there's a pattern as well as if the
+stationary distributions are different
+
+
  Probability of rain after rain 
  2024: 0.5454545454545454 vs 2025: 0.5757575757575758 
  Probability of clear after rain 
@@ -129,4 +133,26 @@ print("Probability of rain after rain \n", "2024:", weekend_only_24[0,0], "vs",
 
 ### Refine Implementation ###
 
+# Inspiration for code:
+# https://ninavergara2.medium.com/calculating-stationary-distribution-in-python-3001d789cd4b
+# https://datascience.oneoffcoder.com/markov-chain-stationary-distribution.html
+
+transition_matrix_t_24 = weekend_only_24.T
+transition_matrix_t_25 = weekend_only_25.T
+
+eigenvals_24, eigenvects_24 = np.linalg.eig(transition_matrix_t_24)
+eigenvals_25, eigenvects_25 = np.linalg.eig(transition_matrix_t_25)
+
+"""close_to_1_idx = np.isclose(eigenvals,1)
+target_eigenvect = eigenvects[:,close_to_1_idx]
+target_eigenvect = target_eigenvect[:,0]
+# Turn the eigenvector elements into probabilites
+stationary_distrib = target_eigenvect / sum(target_eigenvect)"""
+
 # Begin preparing visualizations of your results.
+G = nx.MultiDiGraph(time = "weekend")
+nx.circular_layout(G)
+subax1 = plt.subplot(212)
+G.add_weighted_edges_from([("rain", "clear", 0.5), ("clear", "rain", 0.75)])
+nx.draw(G, with_labels=True, font_weight='bold')
+plt.show()
