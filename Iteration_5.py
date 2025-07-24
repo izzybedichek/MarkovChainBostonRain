@@ -143,11 +143,24 @@ transition_matrix_t_25 = weekend_only_25.T
 eigenvals_24, eigenvects_24 = np.linalg.eig(transition_matrix_t_24)
 eigenvals_25, eigenvects_25 = np.linalg.eig(transition_matrix_t_25)
 
-"""close_to_1_idx = np.isclose(eigenvals,1)
-target_eigenvect = eigenvects[:,close_to_1_idx]
-target_eigenvect = target_eigenvect[:,0]
-# Turn the eigenvector elements into probabilites
-stationary_distrib = target_eigenvect / sum(target_eigenvect)"""
+
+# stationary distribution
+# 2024
+matrix_24 = weekend_only_24.dot(weekend_only_24)
+for it in range(40):
+    Y = matrix_24.dot(matrix_24)
+
+    x = np.diag(matrix_24)
+    y = np.diag(Y)
+    d = np.linalg.norm(x - y, 1)
+
+    if d < 0.001:
+        print(f'num of iterations: {it}')
+        break
+
+    matrix_24 = Y
+
+print(np.diag(matrix_24))
 
 # Begin preparing visualizations of your results.
 G = nx.MultiDiGraph(time = "weekend")
