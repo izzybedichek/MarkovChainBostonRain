@@ -21,6 +21,7 @@ weather["day_of_week"] = ["Q", "Q", "Q", "Q", "W", "W", "W"]*(365/7).__floor__()
 weather["together"] = weather["precipitation"].astype("string") + "," + weather["day_of_week"]
 weather_list = weather["together"].tolist()
 
+print(weather_list)
 weather.to_csv('total_weather_data.csv', index=True)
 
 #https://medium.com/data-science/time-series-data-markov-transition-matrices-7060771e362b
