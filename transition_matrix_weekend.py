@@ -90,18 +90,20 @@ for a,b in weather_transitions_per_day:
     weather_df.loc[a,b] += 1
 print(weather_df)
 
-# normalizing matrix, question: row or column normalization
-weather_row_norm = weather_df.div(weather_df.sum(axis = 1), axis = 0).fillna(0.00)
-#print(weather_row_norm)
-
 # turning into array
-weather_array = np.array(weather_row_norm)
+weather_array = np.array(weather_df)
+print(weather_df)
+
+# shrinking the array so that only weekend data is included then turning it back into a dataframe
+weekend_only = weather_array[2:4, 2:4]
+weekend_only = pd.DataFrame(weekend_only, columns=['rain', 'clear'], index=['rain', 'clear'])
+print(weekend_only)
+
+# normalizing matrix, question: row or column normalization
+weather_row_norm = weekend_only.div(weekend_only.sum(axis = 1), axis = 0).fillna(0.00)
 print(weather_row_norm)
 
-# shrinking the array so that only weekend data is included
-weekend_only = weather_array[2:4, 2:4]
-print(weekend_only)
 
 ### uncomment to get csv versions of these dataframes
 # weather_df.to_csv('weather_transition.csv', index=True)
-# np.savetxt('transition_matrix.csv', weekend_only, delimiter=',')
+# np.savetxt('transition_matrix.csv', weather_row_norm, delimiter=',')

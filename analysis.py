@@ -29,4 +29,7 @@ print("one week: \n", one_week_after, ", \n", "two weeks: \n", two_weeks_after)
 one_week_after = df*initial_state_half
 two_weeks_after = (df**2)*initial_state_half
 
+steady_state = (df**100)*initial_state_half
+print("steady state: \n", steady_state)
+
 print("one week: \n", one_week_after, ", \n", "two weeks: \n", two_weeks_after)

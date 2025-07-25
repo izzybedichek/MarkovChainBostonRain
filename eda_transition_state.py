@@ -4,7 +4,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
-from transition_matrix_weekend import weekend_only
+from transition_matrix_weekend import weather_row_norm
 
 # Simulate a given day (choosing rain)
 weather = 1
