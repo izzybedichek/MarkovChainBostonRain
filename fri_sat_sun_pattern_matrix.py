@@ -9,71 +9,84 @@ Original file is located at
 
 import pandas as pd
 
-weather = pd.read_csv('rain_data.csv')
-weather.rename(columns = {"prcp": "precipitation"}, inplace = True)
-weather["precipitation"] = weather["precipitation"].apply(lambda x: 1 if x > 0 else 0)
-weather
+def weekends_grid(data_file: str, days: list) -> pd.DataFrame:
+  '''Given a data file representing precipitation time series data, and
+  a list showing the order of the days of the week, returns a Dataframe showing weather patterns for
+  Friday, Saturday, and Sunday'''
+  
+  weather = pd.read_csv(data_file)
+  weather.rename(columns = {"prcp": "precipitation"}, inplace = True)
+  weather["precipitation"] = weather["precipitation"].apply(lambda x: 1 if x > 0 else 0)
 
-days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+  weeks = len(weather) // 7
+  days_left = len(weather) % 7
 
-weather["day_of_week"] = days * (365/7).__floor__() + ['Monday', 'Tuesday']
+  weather["day_of_week"] = days * weeks + days[0:days_left]
 
-weekends = weather[weather["day_of_week"].isin(["Friday", "Saturday", "Sunday"])].reset_index(drop=True)
+  weekends = weather[weather["day_of_week"].isin(["Friday", "Saturday", "Sunday"])].reset_index(drop=True)
 
-weekends_condensed = pd.DataFrame(columns=["Start Date", "Precip List", "State"])
+  weekends_condensed = pd.DataFrame(columns=["Start Date", "Precip List", "State"])
 
-full_dates = weekends['time'].to_list()
-full_precip = weekends['precipitation'].to_list()
+  full_dates = weekends['time'].to_list()
+  full_precip = weekends['precipitation'].to_list()
 
-dates = []
-precip_lists = []
-states = []
+  dates = []
+  precip_lists = []
+  states = []
 
-for i in range(0, len(full_dates), 3):
-  dates.append(full_dates[i])
-  precip_lists.append(full_precip[i:i+3])
+  for i in range(0, len(full_dates), 3):
+    dates.append(full_dates[i])
+    precip_lists.append(full_precip[i:i+3])
 
-weekends_condensed["Start Date"] = dates
-weekends_condensed["Precip List"] = precip_lists
+  weekends_condensed["Start Date"] = dates
+  weekends_condensed["Precip List"] = precip_lists
 
-for each in precip_lists:
-  if each == [0, 0, 0]:
-    states.append("No rain")
-  elif each == [1, 0, 0]:
-    states.append("Only Friday")
-  elif each == [0, 1, 0]:
-    states.append("Only Saturday")
-  elif each == [0, 0, 1]:
-    states.append("Only Sunday")
-  elif each == [1, 1, 0]:
-    states.append("Friday and Saturday")
-  elif each == [1, 0, 1]:
-    states.append("Friday and Sunday")
-  elif each == [0, 1, 1]:
-    states.append("Saturday and Sunday")
-  else:
-    states.append("Rain all weekend")
+  for each in precip_lists:
+    if each == [0, 0, 0]:
+      states.append("No rain")
+    elif each == [1, 0, 0]:
+      states.append("Only Friday")
+    elif each == [0, 1, 0]:
+      states.append("Only Saturday")
+    elif each == [0, 0, 1]:
+      states.append("Only Sunday")
+    elif each == [1, 1, 0]:
+      states.append("Friday and Saturday")
+    elif each == [1, 0, 1]:
+      states.append("Friday and Sunday")
+    elif each == [0, 1, 1]:
+      states.append("Saturday and Sunday")
+    else:
+      states.append("Rain all weekend")
 
+  weekends_condensed["State"] = states
 
-weekends_condensed["State"] = states
-
-weekends_condensed
+  return weekends_condensed
 
 def get_transition_tuples(list):
     """converts list of weather patterns into a collection of two-day tuples"""
     return [(list[i - 1], list[i]) for i in range(1, len(list))]
 
-weekend_tuples = get_transition_tuples(states)
+def stochastic_matrix(states):
+  '''generates a stochastic probability matrix based on a list illustrating a sample of transition states'''
+  
+  weekend_tuples = get_transition_tuples(states)
 
-states_index = ["No rain", "Only Friday", "Only Saturday", "Only Sunday", "Friday and Saturday", "Friday and Sunday", "Saturday and Sunday", "Rain all weekend"]
-transition_counts = pd.DataFrame(0, index=states_index, columns=states_index)
+  states_index = ["No rain", "Only Friday", "Only Saturday", "Only Sunday", "Friday and Saturday", "Friday and Sunday", "Saturday and Sunday", "Rain all weekend"]
+  transition_counts = pd.DataFrame(0, index=states_index, columns=states_index)
 
-for each in weekend_tuples:
-  transition_counts.loc[each[0], each[1]] += 1
+  for each in weekend_tuples:
+    transition_counts.loc[each[0], each[1]] += 1
+
+  transition_matrix = transition_counts.div(transition_counts.sum(axis = 1), axis = 0).fillna(0.00)
+
+  return(transition_matrix)
 
 
-transition_counts
 
-transition_matrix = transition_counts.div(transition_counts.sum(axis = 1), axis = 0).fillna(0.00)
+def main():
+  df = weekends_grid('rain_data.csv', ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']) 
+  print(stochastic_matrix(df['State'].tolist()))
 
-transition_matrix
+if __name__ == "__main__":
+  main()
