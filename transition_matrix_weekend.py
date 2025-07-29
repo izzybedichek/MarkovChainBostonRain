@@ -84,5 +84,4 @@ print(weather_row_norm)
 
 
 ### uncomment to get csv versions of these dataframes
-# weather_df.to_csv('csv/weather_transition.csv', index=True)
-# np.savetxt('csv/transition_matrix.csv', weather_row_norm, delimiter=',')
+#weather_row_norm.to_csv('csv/transition_matrix.csv')
