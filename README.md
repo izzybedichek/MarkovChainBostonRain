@@ -1,4 +1,3 @@
 # MarkovChainBostonRain
-
-Izzy to do: Put in a ReadMe section, make a transition graph for Helen and my transition matrices, slides (explain sat_fri_sun matrix and random walks), random walk section (DONE BY 3PM 7/29)
-Helen to do: Jupyter Notebppk for analysis result, methodology section
+**How is this repository used?**
+This repository is used to analyze weather patterns in Boston to evaluate whether the "groundhog effect"--where residents noticed an unusual amount of rainy weekends in spring/summer 2025--is likely to happen randomly. Within this repository are files used to gather precipitation patterns using the meteostat package (data_loading.py), files to make transition matrices (fri_sat_sun_pattern_matrix.py, transition_matrix.py), analysis files with functions to create random walks (random_walk.py), and visualizations of the matrices (visualizations.py). From this repository, one is able to run the same analysis we have, edit the time frames and location, as well as use any of the transition matrix and random walk creation functions. 
