@@ -29,4 +29,4 @@ rain_data = weather_data[["prcp"]].reset_index()
 # checking the output
 print(rain_data)
 
-rain_data.to_csv("rain_data.csv", index = True)
+rain_data.to_csv("csv/rain_data.csv", index = True)
