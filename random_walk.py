@@ -11,8 +11,8 @@ def random_walk(transition_matrix, weeks, prediction="whole"):
         state = 'Only Sunday'
         opts = 8
     else:
-        states_index = ["Rained", "Clear"]
-        state = 'Rained'
+        states_index = ["No Rain", "Rain"]
+        state = 'Rain'
         opts = 2
     
 
@@ -55,7 +55,7 @@ def main():
     matrix = stochastic_matrix(df['State'].tolist())
     matrix.to_csv('matrix')
     walk_probability(matrix, 5, "three_day")
-# ['Only Sunday', 'Only Saturday', 'No rain', 'No rain', 'Only Sunday', 'Friday and Sunday'
+# ['Only Sunday', 'Only Saturday', 'No rain', 'No rain', 'Only Sunday', 'Friday and Sunday']
 
 if __name__ == "__main__":
     main()
