@@ -2,7 +2,7 @@ from fri_sat_sun_pattern_matrix import *
 import numpy as np
 import pandas as pd
 
-def random_walk(transition_matrix, weeks, prediction="whole"):
+def random_walk(transition_matrix, weeks, prediction):
     if prediction == "three_day":
         states_index = ["No rain", "Only Friday", "Only Saturday",
                         "Only Sunday", "Friday and Saturday",
@@ -11,7 +11,7 @@ def random_walk(transition_matrix, weeks, prediction="whole"):
         state = 'Only Sunday'
         opts = 8
     else:
-        states_index = ["No Rain", "Rain"]
+        states_index = ["No rain", "Rain"]
         state = 'Rain'
         opts = 2
     
@@ -49,13 +49,12 @@ def walk_probability(transition_matrix, weeks, prediction, mode, target):
     print(f"The probability of the observed weather pattern according to the given matrix is {percentage}%")
 
 def main():
-    df = weekends_grid('rain_data.csv',
-                       ['Monday', 'Tuesday', 'Wednesday',
-                        'Thursday', 'Friday', 'Saturday', 'Sunday'])
-    matrix = stochastic_matrix(df['State'].tolist())
-    matrix.to_csv('matrix')
-    walk_probability(matrix, 5, "three_day")
-# ['Only Sunday', 'Only Saturday', 'No rain', 'No rain', 'Only Sunday', 'Friday and Sunday']
+    matrix = pd.read_csv('2x2.csv', index_col=0, header=0)
+    print(matrix.iloc[0])
+    walk_probability(matrix, 5, "whole", 'whole', ['Rain', 'Rain',
+                                                   'No rain', 'No rain',
+                                                   'Rain', 'Rain'])
+    
 
 if __name__ == "__main__":
     main()
